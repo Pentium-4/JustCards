@@ -1,0 +1,88 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/popups/create_stack_popup.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/ui/blur_overlay.gd" id="2_blur"]
+[ext_resource type="Script" path="res://scripts/ui/icon_button.gd" id="3_button"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_trash.svg" id="4_trash"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_check.svg" id="5_check"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.973, 0.925, 0.737, 1)
+corner_radius_top_left = 120
+corner_radius_top_right = 120
+corner_radius_bottom_right = 120
+corner_radius_bottom_left = 120
+corner_detail = 24
+shadow_color = Color(0.12, 0.1, 0.05, 0.4)
+shadow_size = 24
+shadow_offset = Vector2(8, 12)
+
+[node name="CreateStackPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Blur" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_blur")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -439.5
+offset_top = -423.0
+offset_right = 439.5
+offset_bottom = 292.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="CancelButton" type="Button" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 700.0
+offset_top = 74.0
+offset_right = 805.0
+offset_bottom = 179.0
+script = ExtResource("3_button")
+bg_color = Color(0.988, 0.529, 0.482, 1)
+icon_texture = ExtResource("4_trash")
+icon_scale = 0.7
+
+[node name="NameEdit" type="LineEdit" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 109.0
+offset_top = 259.0
+offset_right = 771.0
+offset_bottom = 377.0
+theme_override_font_sizes/font_size = 96
+placeholder_text = "stack name"
+alignment = 1
+max_length = 40
+context_menu_enabled = false
+
+[node name="ConfirmButton" type="Button" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 358.0
+offset_top = 470.0
+offset_right = 523.0
+offset_bottom = 635.0
+script = ExtResource("3_button")
+bg_color = Color(0.984, 0.616, 0.439, 1)
+icon_texture = ExtResource("5_check")
+icon_scale = 0.62

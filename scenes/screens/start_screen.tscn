@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/screens/start_screen.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/ui/icon_button.gd" id="2_button"]
+
+[node name="StartScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -400.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/line_spacing = -12
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 9
+theme_override_constants/shadow_outline_size = 6
+theme_override_font_sizes/font_size = 178
+text = "JUST CARDS
+APP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -221.5
+offset_top = 249.0
+offset_right = 250.5
+offset_bottom = 403.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_button")
+bg_color = Color(0.816, 0.525, 0.4, 1)
+corner_radius = 50
+caption = "START"
+caption_font_size = 135
+
+[node name="Credits" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -170.0
+offset_bottom = -110.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 38
+text = "designed by Name Surname"
+horizontal_alignment = 1
+vertical_alignment = 1

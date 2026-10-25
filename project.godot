@@ -1,0 +1,41 @@
+; Engine configuration file.
+; Обычно этот файл правится через Project > Project Settings в редакторе.
+
+config_version=5
+
+[application]
+
+config/name="Just Cards"
+config/description="Простые карточки для изучения языка"
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0.96, 0.72, 0.52, 1)
+boot_splash/show_image=false
+config/icon="res://icon.svg"
+
+[autoload]
+
+AppData="*res://scripts/autoload/app_data.gd"
+BackupIO="*res://scripts/autoload/backup_io.gd"
+
+[display]
+
+window/size/viewport_width=1125
+window/size/viewport_height=2436
+window/size/window_width_override=390
+window/size/window_height_override=844
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_width"
+window/handheld/orientation=1
+
+[gui]
+
+theme/custom="res://theme/main_theme.tres"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=2
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.96, 0.72, 0.52, 1)

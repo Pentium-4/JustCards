@@ -1,0 +1,63 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontVariation" path="res://theme/ui_font.tres" id="1_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_line_edit"]
+content_margin_left = 30.0
+content_margin_top = 8.0
+content_margin_right = 30.0
+content_margin_bottom = 8.0
+bg_color = Color(0.667, 0.824, 0.694, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 12
+shadow_color = Color(0.25, 0.2, 0.1, 0.3)
+shadow_size = 8
+shadow_offset = Vector2(4, 6)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBox_empty"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_scroll_track"]
+content_margin_left = 22.0
+content_margin_right = 22.0
+bg_color = Color(0, 0, 0, 0.28)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+corner_detail = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_scroll_grabber"]
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+corner_detail = 10
+
+[resource]
+default_font = ExtResource("1_font")
+default_font_size = 56
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_shadow_color = Color(0.22, 0.17, 0.08, 0.45)
+Label/constants/shadow_offset_x = 3
+Label/constants/shadow_offset_y = 5
+Label/constants/shadow_outline_size = 3
+LineEdit/colors/caret_color = Color(1, 1, 1, 1)
+LineEdit/colors/font_color = Color(1, 1, 1, 1)
+LineEdit/colors/font_placeholder_color = Color(1, 1, 1, 0.75)
+LineEdit/colors/font_selected_color = Color(1, 1, 1, 1)
+LineEdit/colors/selection_color = Color(0.35, 0.6, 0.45, 0.6)
+LineEdit/constants/caret_width = 3
+LineEdit/styles/focus = SubResource("StyleBox_empty")
+LineEdit/styles/normal = SubResource("StyleBox_line_edit")
+LineEdit/styles/read_only = SubResource("StyleBox_line_edit")
+ScrollContainer/styles/panel = SubResource("StyleBox_empty")
+ScrollContainer/styles/focus = SubResource("StyleBox_empty")
+VScrollBar/styles/grabber = SubResource("StyleBox_scroll_grabber")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBox_scroll_grabber")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBox_scroll_grabber")
+VScrollBar/styles/scroll = SubResource("StyleBox_scroll_track")
+VScrollBar/styles/scroll_focus = SubResource("StyleBox_scroll_track")

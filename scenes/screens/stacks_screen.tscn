@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/screens/stacks_screen.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/ui/smooth_scroll_container.gd" id="2_scroll"]
+[ext_resource type="Script" path="res://scripts/ui/icon_button.gd" id="3_button"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_close.svg" id="4_close"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_save.svg" id="5_save"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_trash.svg" id="6_trash"]
+
+[node name="StacksScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = ExtResource("2_scroll")
+
+[node name="Margin" type="MarginContainer" parent="Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 355
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 180
+
+[node name="Grid" type="GridContainer" parent="Scroll/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_filter = 1
+theme_override_constants/h_separation = 100
+theme_override_constants/v_separation = 100
+columns = 3
+
+[node name="AddButton" type="Button" parent="Scroll/Margin/Grid"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 240)
+layout_mode = 2
+script = ExtResource("3_button")
+bg_color = Color(0.714, 0.337, 0.384, 0.88)
+corner_radius = 45
+icon_texture = ExtResource("4_close")
+icon_scale = 0.68
+icon_rotation_degrees = 45.0
+
+[node name="BackupButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 80.0
+offset_top = 167.0
+offset_right = 210.0
+offset_bottom = 297.0
+script = ExtResource("3_button")
+bg_color = Color(0.984, 0.486, 0.369, 1)
+icon_texture = ExtResource("5_save")
+icon_scale = 0.62
+
+[node name="TrashButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 868.0
+offset_top = 167.0
+offset_right = 998.0
+offset_bottom = 297.0
+script = ExtResource("3_button")
+bg_color = Color(0.984, 0.494, 0.38, 1)
+icon_texture = ExtResource("6_trash")
+icon_scale = 0.7
+
+[node name="ScrollBar" type="VScrollBar" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -62.0
+offset_top = 168.0
+offset_right = -18.0
+offset_bottom = -121.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="DragLayer" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PopupLayer" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

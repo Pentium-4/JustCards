@@ -1,0 +1,128 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/screens/stack_screen.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/ui/blur_overlay.gd" id="2_blur"]
+[ext_resource type="Script" path="res://scripts/ui/icon_button.gd" id="3_button"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_close.svg" id="4_close"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_card"]
+bg_color = Color(0.973, 0.925, 0.737, 1)
+corner_radius_top_left = 140
+corner_radius_top_right = 140
+corner_radius_bottom_right = 140
+corner_radius_bottom_left = 140
+corner_detail = 24
+shadow_color = Color(0.12, 0.1, 0.05, 0.4)
+shadow_size = 28
+shadow_offset = Vector2(8, 14)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_plate"]
+bg_color = Color(0.667, 0.824, 0.694, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 12
+shadow_color = Color(0.25, 0.2, 0.1, 0.3)
+shadow_size = 8
+shadow_offset = Vector2(4, 6)
+
+[node name="StackScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Blur" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_blur")
+
+[node name="Panel" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Card" type="Panel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -483.0
+offset_top = -866.0
+offset_right = 483.0
+offset_bottom = 806.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBox_card")
+
+[node name="Plate" type="Panel" parent="Panel/Card"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 656.0
+offset_right = 846.0
+offset_bottom = 788.0
+theme_override_styles/panel = SubResource("StyleBox_plate")
+
+[node name="NameLabel" type="Label" parent="Panel/Card/Plate"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 100
+text = "WORD"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+uppercase = true
+
+[node name="InfoLabel" type="Label" parent="Panel/Card"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 880.0
+offset_right = 886.0
+offset_bottom = 1100.0
+theme_override_colors/font_color = Color(0.6, 0.55, 0.42, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_font_sizes/font_size = 52
+text = "Карточки появятся
+на следующем этапе"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseButton" type="Button" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 350.5
+offset_top = -1041.0
+offset_right = 483.5
+offset_bottom = -908.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_button")
+bg_color = Color(0.871, 0.435, 0.294, 1)
+icon_texture = ExtResource("4_close")
+icon_scale = 0.6

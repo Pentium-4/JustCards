@@ -1,0 +1,22 @@
+[gd_resource type="FontVariation" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/Abel-Regular.ttf" id="1_abel"]
+[ext_resource type="FontFile" path="res://assets/fonts/RobotoCondensed-Cyrillic-Variable.ttf" id="2_cyr"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansGeorgian-Variable.ttf" id="3_geo"]
+
+[sub_resource type="FontVariation" id="FontVariation_cyr"]
+base_font = ExtResource("2_cyr")
+variation_opentype = {
+2003265652: 300
+}
+
+[sub_resource type="FontVariation" id="FontVariation_geo"]
+base_font = ExtResource("3_geo")
+variation_opentype = {
+2003072104: 62.5,
+2003265652: 300
+}
+
+[resource]
+base_font = ExtResource("1_abel")
+fallbacks = Array[Font]([SubResource("FontVariation_cyr"), SubResource("FontVariation_geo")])
