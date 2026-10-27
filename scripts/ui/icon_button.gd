@@ -78,7 +78,7 @@ func _init() -> void:
 	# Внутренние дочерние узлы: создаются кодом и не сохраняются в сцену,
 	# поэтому в дереве сцены их не видно — снаружи кнопка выглядит одним узлом.
 	_icon_shadow = _make_icon_rect()
-	_icon_shadow.modulate = Color(0.2, 0.15, 0.05, 0.35)
+	_icon_shadow.modulate = Color(0.2, 0.15, 0.05, 0.22)
 	_icon_rect = _make_icon_rect()
 	_label = Label.new()
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -121,7 +121,7 @@ func _update_children() -> void:
 		rect.pivot_offset = icon_size / 2.0
 		rect.rotation_degrees = icon_rotation_degrees
 		rect.position = (size - icon_size) / 2.0
-	_icon_shadow.position += Vector2(2, 3)
+	_icon_shadow.position += Vector2(1.5, 2.5)
 	_icon_rect.self_modulate = icon_color
 	_label.text = caption
 	_label.visible = caption != ""
@@ -142,6 +142,12 @@ func _draw() -> void:
 		style.shadow_size = 16
 		style.shadow_offset = Vector2(6, 8) * (1.0 - 0.5 * _press_amount)
 	draw_style_box(style, Rect2(Vector2.ZERO, size))
+
+
+## Обновить вид кнопки, если её состояние поменяли из кода
+## (например, set_pressed_no_signal у переключателя).
+func sync_state() -> void:
+	_animate_press()
 
 
 func _is_down() -> bool:

@@ -26,6 +26,11 @@ func _ready() -> void:
 	_no_button.pressed.connect(_answer.bind(false))
 
 
+## «Назад» / Esc означает «нет».
+func cancel() -> void:
+	_answer(false)
+
+
 func _answer(yes: bool) -> void:
 	if _closing:
 		return

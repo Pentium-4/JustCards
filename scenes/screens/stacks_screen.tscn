@@ -17,7 +17,19 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_script")
 
-[node name="Scroll" type="ScrollContainer" parent="."]
+[node name="Column" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -562.5
+offset_right = 562.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Column"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -29,7 +41,7 @@ horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 script = ExtResource("2_scroll")
 
-[node name="Margin" type="MarginContainer" parent="Scroll"]
+[node name="Margin" type="MarginContainer" parent="Column/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
@@ -38,7 +50,7 @@ theme_override_constants/margin_top = 355
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 180
 
-[node name="Grid" type="GridContainer" parent="Scroll/Margin"]
+[node name="Grid" type="GridContainer" parent="Column/Scroll/Margin"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -47,7 +59,7 @@ theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 100
 columns = 3
 
-[node name="AddButton" type="Button" parent="Scroll/Margin/Grid"]
+[node name="AddButton" type="Button" parent="Column/Scroll/Margin/Grid"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(240, 240)
 layout_mode = 2
@@ -58,7 +70,7 @@ icon_texture = ExtResource("4_close")
 icon_scale = 0.68
 icon_rotation_degrees = 45.0
 
-[node name="BackupButton" type="Button" parent="."]
+[node name="BackupButton" type="Button" parent="Column"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 80.0
@@ -70,7 +82,7 @@ bg_color = Color(0.984, 0.486, 0.369, 1)
 icon_texture = ExtResource("5_save")
 icon_scale = 0.62
 
-[node name="TrashButton" type="Button" parent="."]
+[node name="TrashButton" type="Button" parent="Column"]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 868.0
@@ -82,7 +94,7 @@ bg_color = Color(0.984, 0.494, 0.38, 1)
 icon_texture = ExtResource("6_trash")
 icon_scale = 0.7
 
-[node name="ScrollBar" type="VScrollBar" parent="."]
+[node name="ScrollBar" type="VScrollBar" parent="Column"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

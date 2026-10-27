@@ -7,6 +7,7 @@ config_version=5
 
 config/name="Just Cards"
 config/description="Простые карточки для изучения языка"
+config/version="1.0"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.96, 0.72, 0.52, 1)
@@ -17,6 +18,7 @@ config/icon="res://icon.svg"
 
 AppData="*res://scripts/autoload/app_data.gd"
 BackupIO="*res://scripts/autoload/backup_io.gd"
+ImagePicker="*res://scripts/autoload/image_picker.gd"
 
 [display]
 
@@ -25,7 +27,7 @@ window/size/viewport_height=2436
 window/size/window_width_override=390
 window/size/window_height_override=844
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep_width"
+window/stretch/aspect="expand"
 window/handheld/orientation=1
 
 [gui]
@@ -33,6 +35,8 @@ window/handheld/orientation=1
 theme/custom="res://theme/main_theme.tres"
 
 [rendering]
+
+textures/vram_compression/import_etc2_astc=true
 
 textures/canvas_textures/default_texture_filter=2
 

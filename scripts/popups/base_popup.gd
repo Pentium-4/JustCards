@@ -12,6 +12,10 @@ extends Control
 ## Отправляется, когда попап закрылся и удаляется.
 signal closed
 
+## Группа, в которую записываются все открытые попапы. Группы в Godot —
+## это как теги у акторов в Unreal: по ним удобно найти все нужные узлы.
+const GROUP := &"popups"
+
 @onready var _blur: BlurOverlay = $Blur
 @onready var _panel: Control = $Panel
 
@@ -20,7 +24,18 @@ var _closing := false
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
+	add_to_group(GROUP)
 	open()
+
+
+## Что делать при «Назад» / Esc. По умолчанию просто закрыться;
+## попапы-наследники могут поменять поведение (см. confirm_popup.gd).
+func cancel() -> void:
+	close()
+
+
+func is_closing() -> bool:
+	return _closing
 
 
 func open() -> void:

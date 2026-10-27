@@ -2,11 +2,8 @@ class_name StackTile
 extends Control
 ## Плитка одного стака в таблице на главном экране.
 ##
-## Плитка только распознаёт жесты и сообщает о них сигналами:
-##   - короткое нажатие            → tapped
-##   - долгое нажатие и перенос    → drag_started / drag_moved / drag_ended
-##   - обычный свайп               → ничего не делаем, событие уходит
-##                                   к ScrollContainer, и он прокручивает список
+## Плитка только сообщает о жестах сигналами. Сами жесты распознаёт
+## LongPressGesture (тот же объект используется для картинки на карточке).
 ## Что делать при переносе (показать корзину, удалить стак), решает экран.
 ## Плитка про корзину ничего не знает.
 
@@ -15,22 +12,19 @@ signal drag_started(tile: StackTile, pointer_position: Vector2)
 signal drag_moved(pointer_position: Vector2)
 signal drag_ended(pointer_position: Vector2)
 
-## Сколько секунд держать палец, чтобы поднять плитку.
-const LONG_PRESS_TIME := 0.45
-## Если палец сдвинулся дальше этого (в пикселях макета) до срабатывания
-## долгого нажатия, значит, пользователь прокручивает список.
-const MOVE_TOLERANCE := 24.0
-
 var stack_id := ""
+
+var _gesture := LongPressGesture.new()
 
 @onready var _name_label: Label = %NameLabel
 
-# Состояние жеста. Это маленький «конечный автомат»: плитка всегда
-# находится в одном из трёх состояний.
-enum Gesture { NONE, PRESSING, DRAGGING }
-var _gesture := Gesture.NONE
-var _press_position := Vector2.ZERO
-var _press_time := 0.0
+
+func _ready() -> void:
+	# Пересылаем сигналы жеста наружу, добавляя к ним «кто это».
+	_gesture.tapped.connect(func(): tapped.emit(stack_id))
+	_gesture.drag_started.connect(func(pos: Vector2): drag_started.emit(self, pos))
+	_gesture.drag_moved.connect(drag_moved.emit)
+	_gesture.drag_ended.connect(drag_ended.emit)
 
 
 func setup(id: String, stack_name: String) -> void:
@@ -41,40 +35,13 @@ func setup(id: String, stack_name: String) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			_gesture = Gesture.PRESSING
-			_press_position = event.global_position
-			_press_time = 0.0
-		else:
-			_on_release(event.global_position)
-
-	elif event is InputEventMouseMotion and _gesture != Gesture.NONE:
-		if _gesture == Gesture.PRESSING:
-			if event.global_position.distance_to(_press_position) > MOVE_TOLERANCE:
-				_gesture = Gesture.NONE # это прокрутка, а не нажатие
-		elif _gesture == Gesture.DRAGGING:
-			drag_moved.emit(event.global_position)
-			# Событие «съедаем», чтобы список не прокручивался, пока тащим плитку.
-			accept_event()
+	# Если жест «съел» событие (тащим плитку), список не прокручивается.
+	if _gesture.handle_input(event):
+		accept_event()
 
 
 func _process(delta: float) -> void:
-	if _gesture != Gesture.PRESSING:
-		return
-	_press_time += delta
-	if _press_time >= LONG_PRESS_TIME:
-		_gesture = Gesture.DRAGGING
-		drag_started.emit(self, get_global_mouse_position())
-
-
-func _on_release(pointer_position: Vector2) -> void:
-	match _gesture:
-		Gesture.PRESSING:
-			tapped.emit(stack_id)
-		Gesture.DRAGGING:
-			drag_ended.emit(pointer_position)
-	_gesture = Gesture.NONE
+	_gesture.update(delta, get_global_mouse_position())
 
 
 ## Плитка-«призрак», которая летает за пальцем во время переноса:

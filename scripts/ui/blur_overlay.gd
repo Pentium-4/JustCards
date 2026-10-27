@@ -6,7 +6,7 @@ extends Control
 ## и заодно не пропускает нажатия к экрану внизу.
 ## Внутри два прохода шейдера blur_pass.gdshader:
 ##   1) горизонтальное размытие;
-##   2) BackBufferCopy «фотографирует» результат;
+##   2) BackBufferCopy «фотографирует» результат (и перед первым проходом тоже);
 ##   3) вертикальное размытие поверх этой фотографии.
 
 const BLUR_SHADER := preload("res://shaders/blur_pass.gdshader")
@@ -26,12 +26,19 @@ var _amount := 0.0
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	# Перед каждым проходом «фотографируем» экран заново. Без первой
+	# фотографии второй попап поверх первого размыл бы старый снимок экрана.
+	_add_back_buffer_copy()
 	_pass_h = _make_pass(Vector2(1, 0))
+	_add_back_buffer_copy()
+	_pass_v = _make_pass(Vector2(0, 1))
+	_set_amount(_amount)
+
+
+func _add_back_buffer_copy() -> void:
 	var copy := BackBufferCopy.new()
 	copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
 	add_child(copy)
-	_pass_v = _make_pass(Vector2(0, 1))
-	_set_amount(_amount)
 
 
 func _make_pass(direction: Vector2) -> ColorRect:

@@ -1,0 +1,154 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/card_view.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/ui/icon_button.gd" id="2_button"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_add_image.svg" id="3_add_image"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_trash.svg" id="4_trash"]
+[ext_resource type="Shader" path="res://shaders/card_image.gdshader" id="5_image_shader"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_arrow_left.svg" id="6_left"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_arrow_right.svg" id="7_right"]
+[ext_resource type="Texture2D" path="res://assets/icons/icon_rotate.svg" id="8_rotate"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_body"]
+bg_color = Color(0.973, 0.925, 0.737, 1)
+corner_radius_top_left = 140
+corner_radius_top_right = 140
+corner_radius_bottom_right = 140
+corner_radius_bottom_left = 140
+corner_detail = 24
+shadow_color = Color(0.12, 0.1, 0.05, 0.4)
+shadow_size = 28
+shadow_offset = Vector2(8, 14)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_image_frame"]
+bg_color = Color(0.667, 0.824, 0.694, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 12
+shadow_color = Color(0.25, 0.2, 0.1, 0.3)
+shadow_size = 10
+shadow_offset = Vector2(5, 7)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_image"]
+resource_local_to_scene = true
+shader = ExtResource("5_image_shader")
+
+[node name="CardView" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 966.0
+offset_bottom = 1672.0
+script = ExtResource("1_script")
+
+[node name="Body" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBox_body")
+
+[node name="AddImageButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 118.0
+offset_top = 98.0
+offset_right = 361.0
+offset_bottom = 314.0
+script = ExtResource("2_button")
+bg_color = Color(0.667, 0.824, 0.694, 1)
+corner_radius = 28
+icon_texture = ExtResource("3_add_image")
+icon_scale = 1.13
+
+[node name="TrashButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 754.0
+offset_top = 98.0
+offset_right = 869.0
+offset_bottom = 213.0
+script = ExtResource("2_button")
+bg_color = Color(0.988, 0.529, 0.482, 1)
+icon_texture = ExtResource("4_trash")
+icon_scale = 0.7
+
+[node name="ImageFrame" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 118.0
+offset_top = 291.0
+offset_right = 844.0
+offset_bottom = 1017.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBox_image_frame")
+
+[node name="Image" type="TextureRect" parent="ImageFrame"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_image")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+expand_mode = 1
+
+[node name="WordEdit" type="LineEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 120.0
+offset_top = 656.0
+offset_right = 846.0
+offset_bottom = 788.0
+theme_override_font_sizes/font_size = 100
+placeholder_text = "WORD"
+alignment = 1
+max_length = 60
+context_menu_enabled = false
+
+[node name="PrevButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 85.0
+offset_top = 1321.0
+offset_right = 225.0
+offset_bottom = 1541.0
+script = ExtResource("2_button")
+bg_color = Color(1, 1, 1, 0)
+shadow = false
+icon_texture = ExtResource("6_left")
+icon_color = Color(0.984, 0.616, 0.439, 1)
+icon_scale = 1.72
+
+[node name="NextButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 737.0
+offset_top = 1319.0
+offset_right = 877.0
+offset_bottom = 1539.0
+script = ExtResource("2_button")
+bg_color = Color(1, 1, 1, 0)
+shadow = false
+icon_texture = ExtResource("7_right")
+icon_color = Color(0.984, 0.616, 0.439, 1)
+icon_scale = 1.72
+
+[node name="FlipButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 370.0
+offset_top = 1316.0
+offset_right = 595.0
+offset_bottom = 1541.0
+script = ExtResource("2_button")
+bg_color = Color(0.984, 0.616, 0.439, 1)
+icon_texture = ExtResource("8_rotate")
+icon_scale = 0.56
