@@ -16,7 +16,7 @@ const LOAD_COLOR = "rgba(252, 123, 79, 0.7)";
 export function createStacksScreen(layer, { onOpenStack }) {
 	// ---------- Разметка ----------
 	const addTile = button({ x: 0, y: 0, w: 240, radius: 45, color: "var(--add-stack)",
-		icon: "close", iconScale: 0.68, rotate: 45, onClick: createStack });
+		icon: "plus", iconScale: 0.72, onClick: createStack });
 	addTile.style.position = "relative";
 	addTile.style.left = addTile.style.top = "";
 
@@ -27,7 +27,8 @@ export function createStacksScreen(layer, { onOpenStack }) {
 	const column = h("div", { class: "column" }, scroll, scrollbar);
 
 	const backupBtn = button({ x: 80, y: 167, w: 130, color: SAVE_COLOR, icon: "save", iconScale: 0.62, onClick: onBackupPressed });
-	const trashBtn = button({ x: 868, y: 167, w: 130, color: "var(--red-top)", icon: "trash", iconScale: 0.7,
+	// Левый край кнопки сохранения и правый край корзины совпадают с краями сетки (поля по 80).
+	const trashBtn = button({ x: 915, y: 167, w: 130, color: "var(--red-top)", icon: "trash", iconScale: 0.7,
 		onClick: () => wiggle(trashBtn) }); // в корзину тащат, а не нажимают
 
 	layer.stage.insertBefore(column, layer.frame);

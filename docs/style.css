@@ -178,7 +178,6 @@ body {
 
 /* Иконка: белая SVG как маска, поэтому цвет можно задать любой (--ic). */
 .icon-wrap {
-	filter: drop-shadow(1.5px 2.5px 1.5px rgba(51, 38, 13, 0.22));
 	pointer-events: none;
 	display: flex;
 }
@@ -227,6 +226,7 @@ body {
 }
 .scroll {
 	position: absolute;
+	overscroll-behavior: contain;
 	inset: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -236,9 +236,12 @@ body {
 .scroll::-webkit-scrollbar { display: none; }
 .grid {
 	display: grid;
+	/* Поля по 80 px слева и справа: 80 + 3×240 + 2×102.5 + 80 = 1125.
+	   Расстояние между строками такое же, как между столбцами,
+	   и такое же — от верхних кнопок до первой строки. */
 	grid-template-columns: repeat(3, 240px);
-	gap: 100px;
-	padding: 355px 0 180px 80px;
+	gap: 102.5px;
+	padding: 399.5px 80px 180px 80px;
 }
 
 .tile {
@@ -248,8 +251,8 @@ body {
 }
 .tile .back, .tile .front {
 	position: absolute;
-	width: 220px;
-	height: 224px;
+	width: 240px;
+	height: 240px;
 	border-radius: 45px;
 	pointer-events: none;
 }
@@ -257,11 +260,11 @@ body {
 	background: rgba(248, 234, 188, 0.55);
 	border: 2px solid rgba(255, 255, 255, 0.35);
 }
-.tile .back2 { left: 0; top: 0; }
-.tile .back1 { left: 10px; top: 8px; }
+.tile .back2 { left: -20px; top: -16px; }
+.tile .back1 { left: -10px; top: -8px; }
 .tile .front {
-	left: 20px;
-	top: 16px;
+	left: 0;
+	top: 0;
 	background: var(--cream-tile);
 	box-shadow: 5px 8px 14px rgba(51, 31, 13, 0.3);
 }

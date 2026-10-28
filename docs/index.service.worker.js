@@ -6,7 +6,7 @@
 // Стратегия «сначала сеть»: если интернет есть — берём свежие файлы
 // (и обновляем копию), если нет — открываем сохранённую копию.
 
-const CACHE_NAME = "just-cards-web-1.2";
+const CACHE_NAME = "just-cards-web-1.3";
 const FILES = [
 	"./",
 	"index.html",
@@ -15,7 +15,7 @@ const FILES = [
 	"js/main.js", "js/ui.js", "js/data.js", "js/platform.js", "js/gesture.js", "js/popups.js", "js/version.js",
 	"js/screens/start.js", "js/screens/stacks.js", "js/screens/stack.js",
 	"fonts/abel.woff2", "fonts/roboto-condensed-cyrillic.woff2", "fonts/noto-sans-georgian.woff2",
-	"img/bg_main.png", "img/icon_180.png", "img/icon.svg",
+	"img/bg_main.png", "img/icon_180.png", "img/icon.svg", "icons/icon_plus.svg",
 	...["add_image", "arrow_left", "arrow_right", "check", "close", "load", "loop", "rotate", "save", "shuffle", "trash"]
 		.map((n) => `icons/icon_${n}.svg`),
 ];

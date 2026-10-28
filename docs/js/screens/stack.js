@@ -45,10 +45,12 @@ export function openStackScreen(stackId) {
 	const holder = h("div", { class: "card-holder" });
 	const rotateAllBtn = button({ x: 80, y: 177, w: 326, h: 128, radius: 64, color: "var(--orange-dark)",
 		caption: "ROTATE ALL", fontSize: 64, onClick: rotateAll });
-	const closeBtn = button({ x: 913, y: 177, w: 133, color: "var(--orange-dark)", icon: "close", iconScale: 0.6, onClick: close });
-	const shuffleBtn = button({ x: 244, y: 2110, w: 142, color: "var(--orange-bottom)", icon: "shuffle", iconScale: 0.62, onClick: shuffle });
-	const addBtn = button({ x: 463, y: 2079, w: 204, color: "var(--orange)", icon: "close", iconScale: 0.55, rotate: 45, onClick: addCard });
-	const loopBtn = button({ x: 743, y: 2110, w: 142, color: "var(--orange-bottom)", icon: "loop", iconScale: 0.8, onClick: toggleLoop });
+	// Края верхних кнопок совпадают с краями карточки (поля по 80), центры — на одной высоте.
+	const closeBtn = button({ x: 913, y: 174.5, w: 133, color: "var(--orange-dark)", icon: "close", iconScale: 0.6, onClick: close });
+	// Нижний ряд: «+» ровно по центру экрана, боковые кнопки на равном расстоянии от него.
+	const shuffleBtn = button({ x: 241.5, y: 2110, w: 142, color: "var(--orange-bottom)", icon: "shuffle", iconScale: 0.62, onClick: shuffle });
+	const addBtn = button({ x: 460.5, y: 2079, w: 204, color: "var(--orange)", icon: "plus", iconScale: 0.585, onClick: addCard });
+	const loopBtn = button({ x: 741.5, y: 2110, w: 142, color: "var(--orange-bottom)", icon: "loop", iconScale: 0.8, onClick: toggleLoop });
 	loopBtn.classList.toggle("pressed", stack.loop);
 
 	const content = h("div", { class: "pop", style: { position: "absolute", inset: 0 } },
@@ -59,23 +61,49 @@ export function openStackScreen(stackId) {
 	current = createCard();
 	holder.append(current.el);
 
+	// ---------- Свайп по всему экрану ----------
+	// Начать можно где угодно (на карточке, рядом, ниже), кроме кнопок и поля
+	// ввода. Отпустить палец тоже можно где угодно — поэтому слушаем window.
+	layer.root.style.touchAction = "none";
+	let swipeStart = null;
+	layer.root.addEventListener("pointerdown", (e) => {
+		if (e.target.closest("button, input")) return;
+		current.word.blur(); // нажали мимо поля — прячем клавиатуру
+		swipeStart = { x: e.clientX, y: e.clientY, t: performance.now() };
+	});
+	const onPointerUp = (e) => {
+		if (!swipeStart) return;
+		const start = swipeStart;
+		swipeStart = null;
+		if (current.imageDragging) return;
+		const dx = (e.clientX - start.x) / scale;
+		const dy = (e.clientY - start.y) / scale;
+		const fast = performance.now() - start.t < 250; // быстрый взмах засчитываем и покороче
+		const distance = fast ? SWIPE_DISTANCE * 0.6 : SWIPE_DISTANCE;
+		if (Math.abs(dx) > distance && Math.abs(dx) > Math.abs(dy) * 1.2) go(dx < 0 ? 1 : -1);
+	};
+	window.addEventListener("pointerup", onPointerUp);
+	window.addEventListener("pointercancel", () => (swipeStart = null));
+
 	// =========================================================================
 	// Карточка
 	// =========================================================================
 
 	function createCard() {
 		const el = h("div", { class: "card" });
-		const addImageBtn = button({ x: 118, y: 98, w: 243, h: 216, radius: 28, color: "var(--mint)",
+		// Внутри карточки поля по 120 с обеих сторон: всё симметрично.
+		const addImageBtn = button({ x: 120, y: 98, w: 243, h: 216, radius: 28, color: "var(--mint)",
 			icon: "add_image", iconScale: 1.13, onClick: onAddImage });
-		const trashBtn = button({ x: 754, y: 98, w: 115, color: "var(--red)", icon: "trash", iconScale: 0.7, onClick: onDeleteCard });
-		const image = place(h("div", { class: "image-frame" }), 118, 291, 726, 726);
+		const trashBtn = button({ x: 731, y: 98, w: 115, color: "var(--red)", icon: "trash", iconScale: 0.7, onClick: onDeleteCard });
+		const image = place(h("div", { class: "image-frame" }), 120, 291, 726, 726);
 		const word = place(h("input", { class: "field word", type: "text", placeholder: "WORD", maxlength: "60",
 			autocomplete: "off", autocorrect: "off", spellcheck: "false" }), 120, WORD_Y_NO_IMAGE, 726, 132);
-		const prevBtn = button({ x: 85, y: 1321, w: 140, h: 220, flat: true, icon: "arrow_left", iconScale: 1.72,
+		// Стрелки: внешние края уголков на линии полей (120), центры — на высоте кнопки переворота.
+		const prevBtn = button({ x: 90.5, y: 1318.5, w: 140, h: 220, flat: true, icon: "arrow_left", iconScale: 1.72,
 			iconColor: "var(--orange-light)", onClick: () => go(-1) });
-		const nextBtn = button({ x: 737, y: 1319, w: 140, h: 220, flat: true, icon: "arrow_right", iconScale: 1.72,
+		const nextBtn = button({ x: 735.5, y: 1318.5, w: 140, h: 220, flat: true, icon: "arrow_right", iconScale: 1.72,
 			iconColor: "var(--orange-light)", onClick: () => go(1) });
-		const flipBtn = button({ x: 370, y: 1316, w: 225, color: "var(--orange-light)", icon: "rotate", iconScale: 0.56, onClick: flip });
+		const flipBtn = button({ x: 370.5, y: 1316, w: 225, color: "var(--orange-light)", icon: "rotate", iconScale: 0.56, onClick: flip });
 		el.append(addImageBtn, trashBtn, image, word, prevBtn, nextBtn, flipBtn);
 
 		const card = { el, addImageBtn, trashBtn, image, word, prevBtn, nextBtn, imageDragging: false };
@@ -83,21 +111,6 @@ export function openStackScreen(stackId) {
 		word.addEventListener("input", () => {
 			fitWord(word);
 			AppData.setCardText(stackId, cardIndex(), sideName(), word.value);
-		});
-
-		// Свайп по карточке (и нажатие мимо поля — прячем клавиатуру)
-		let swipeStart = null;
-		el.addEventListener("pointerdown", (e) => {
-			if (e.target.closest("button, input")) return;
-			word.blur();
-			swipeStart = { x: e.clientX, y: e.clientY };
-		});
-		el.addEventListener("pointerup", (e) => {
-			if (!swipeStart || card.imageDragging) { swipeStart = null; return; }
-			const dx = (e.clientX - swipeStart.x) / scale;
-			const dy = (e.clientY - swipeStart.y) / scale;
-			swipeStart = null;
-			if (Math.abs(dx) > SWIPE_DISTANCE && Math.abs(dx) > Math.abs(dy) * 1.2) go(dx < 0 ? 1 : -1);
 		});
 
 		setupImageDrag(card);
@@ -159,35 +172,65 @@ export function openStackScreen(stackId) {
 		old.el.style.pointerEvents = "none";
 		current = createCard();
 		const el = current.el;
-		const anims = [];
 
 		if (how === "delete") {
+			// Старая сжимается и тает, новая проявляется под ней.
 			holder.insertBefore(el, old.el);
-			anims.push(old.el.animate([{ transform: "scale(1)", opacity: 1 }, { transform: "scale(0.6)", opacity: 0 }],
-				{ duration: SLIDE_MS, easing: "ease-in", fill: "forwards" }));
-			anims.push(el.animate([{ transform: "scale(0.92)", opacity: 0 }, { transform: "scale(1)", opacity: 1 }],
-				{ duration: SLIDE_MS, delay: 150, easing: EASE_OUT, fill: "backwards" }));
+			await Promise.all([
+				animate(old.el, { transform: "scale(1)", opacity: 1 }, { transform: "scale(0.6)", opacity: 0 }, SLIDE_MS, "ease-in"),
+				animate(el, { transform: "scale(0.92)", opacity: 0 }, { transform: "none", opacity: 1 }, SLIDE_MS, EASE_OUT, 150),
+			]);
 		} else if (how === "add") {
+			// Новая вылетает снизу поверх старой.
 			holder.append(el);
-			anims.push(el.animate([{ transform: "translateY(2600px)" }, { transform: "translateY(0)" }],
-				{ duration: SLIDE_MS + 100, easing: EASE_BACK }));
+			await animate(el, { transform: "translateY(2600px)" }, { transform: "none" }, SLIDE_MS + 100, EASE_BACK);
 		} else {
+			// Старая улетает в одну сторону, новая прилетает с другой.
 			holder.append(el);
 			const s = how === "prev" ? -1 : 1;
-			anims.push(el.animate([{ transform: `translateX(${1300 * s}px) rotate(${10 * s}deg)` }, { transform: "none" }],
-				{ duration: SLIDE_MS, easing: EASE_OUT }));
-			anims.push(old.el.animate([{ transform: "none" }, { transform: `translateX(${-1300 * s}px) rotate(${-10 * s}deg)` }],
-				{ duration: SLIDE_MS, easing: EASE_OUT, fill: "forwards" }));
+			await Promise.all([
+				animate(el, { transform: `translateX(${1300 * s}px) rotate(${10 * s}deg)` }, { transform: "none" }, SLIDE_MS, EASE_OUT),
+				animate(old.el, { transform: "none" }, { transform: `translateX(${-1300 * s}px) rotate(${-10 * s}deg)` }, SLIDE_MS, EASE_OUT),
+			]);
 		}
-		await Promise.all(anims.map((a) => a.finished));
 		old.el.remove();
 		busy = false;
 	}
 
+	/**
+	 * Плавно переводит элемент из состояния from в to (CSS-переход).
+	 * Сначала ставим начальное состояние без анимации, ждём кадр, потом
+	 * включаем переход — так Safari гарантированно его проигрывает.
+	 * Запасной таймер не даёт экрану «застрять», если что-то пошло не так.
+	 */
+	function animate(el, from, to, ms, easing, delay = 0) {
+		return new Promise((resolve) => {
+			el.style.transition = "none";
+			Object.assign(el.style, from);
+			el.getBoundingClientRect(); // заставляем браузер применить начальное состояние
+			requestAnimationFrame(() => requestAnimationFrame(() => {
+				el.style.transition = `transform ${ms}ms ${easing} ${delay}ms, opacity ${ms}ms ease ${delay}ms`;
+				Object.assign(el.style, to);
+				// Ждём конца перехода; если событие не придёт — выручит таймер.
+				let done = false;
+				const finish = () => {
+					if (done) return;
+					done = true;
+					el.removeEventListener("transitionend", onEnd);
+					el.style.transition = "";
+					resolve();
+				};
+				const onEnd = (e) => { if (e.target === el && e.propertyName === "transform") finish(); };
+				el.addEventListener("transitionend", onEnd);
+				setTimeout(finish, ms + delay + 120);
+			}));
+		});
+	}
+
 	async function bounce(direction) {
 		busy = true;
-		await current.el.animate([{ transform: "none" }, { transform: `translateX(${-40 * direction}px)` }, { transform: "none" }],
-			{ duration: 350, easing: "ease-out" }).finished;
+		await animate(current.el, { transform: "none" }, { transform: `translateX(${-40 * direction}px)` }, 100, "ease-out");
+		await animate(current.el, { transform: `translateX(${-40 * direction}px)` }, { transform: "none" }, 250, EASE_BACK);
 		busy = false;
 	}
 
@@ -345,6 +388,7 @@ export function openStackScreen(stackId) {
 
 	function close() {
 		document.removeEventListener("keydown", onKey);
+		window.removeEventListener("pointerup", onPointerUp);
 		current.word.blur();
 		AppData.saveNow();
 		layer.close().then(() => AppData.clearImageCache());
