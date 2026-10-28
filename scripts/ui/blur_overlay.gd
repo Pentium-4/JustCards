@@ -73,6 +73,9 @@ func _set_amount(value: float) -> void:
 	_amount = value
 	if _pass_h == null:
 		return
+	# Пока размытия нет, проходы не рисуем вовсе — экономим видеокарту.
+	_pass_h.visible = value > 0.001
+	_pass_v.visible = value > 0.001
 	_pass_h.material.set_shader_parameter("radius", blur_radius * value)
 	_pass_v.material.set_shader_parameter("radius", blur_radius * value)
 	var t := tint

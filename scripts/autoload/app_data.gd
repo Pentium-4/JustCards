@@ -48,7 +48,11 @@ var stacks: Array[Dictionary] = []
 
 var _save_queued := false
 ## Уже загруженные картинки, чтобы не читать файл с диска каждый раз.
+## Храним только несколько последних: каждая картинка занимает ~3 МБ
+## видеопамяти, а на айфоне браузер перезапускает страницу, если памяти
+## становится слишком много.
 var _texture_cache := {}
+const TEXTURE_CACHE_SIZE := 6
 
 
 func _ready() -> void:
@@ -226,14 +230,26 @@ func get_image_texture(file_name: String) -> Texture2D:
 	if file_name == "":
 		return null
 	if _texture_cache.has(file_name):
-		return _texture_cache[file_name]
+		# Переставляем в конец: эта картинка снова «свежая».
+		var cached: Texture2D = _texture_cache[file_name]
+		_texture_cache.erase(file_name)
+		_texture_cache[file_name] = cached
+		return cached
 	var image := Image.load_from_file(IMAGES_DIR + file_name)
 	if image == null or image.is_empty():
 		return null
 	image.generate_mipmaps() # чтобы уменьшенная картинка не «рябила»
 	var texture := ImageTexture.create_from_image(image)
 	_texture_cache[file_name] = texture
+	# Dictionary в Godot помнит порядок добавления: первый ключ — самый старый.
+	while _texture_cache.size() > TEXTURE_CACHE_SIZE:
+		_texture_cache.erase(_texture_cache.keys()[0])
 	return texture
+
+
+## Выбросить все загруженные картинки из памяти (например, при выходе из стака).
+func clear_texture_cache() -> void:
+	_texture_cache.clear()
 
 
 ## Уменьшает картинку и сохраняет в файл. Возвращает имя файла.

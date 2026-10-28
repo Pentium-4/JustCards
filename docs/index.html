@@ -97,6 +97,16 @@ body {
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Just Cards">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>
+// Ограничиваем чёткость рендера до 2x. На айфоне экран 3x, и рендер в полном
+// разрешении расходует в 2,25 раза больше видеопамяти — разницы на глаз почти нет.
+(function () {
+  var realRatio = window.devicePixelRatio || 1;
+  try {
+    Object.defineProperty(window, "devicePixelRatio", { get: function () { return Math.min(realRatio, 2); } });
+  } catch (e) {}
+})();
+</script>
 	</head>
 	<body>
 		<canvas id="canvas">
@@ -115,7 +125,7 @@ body {
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":735692,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"serviceWorker":"index.service.worker.js"};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":true,"fileSizes":{"index.pck":535980,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4,"serviceWorker":"index.service.worker.js"};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 

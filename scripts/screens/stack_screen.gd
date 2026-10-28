@@ -47,6 +47,11 @@ func setup(id: String) -> void:
 	stack_id = id
 
 
+func _exit_tree() -> void:
+	# Экран стака закрыли — его картинки больше не нужны в памяти.
+	AppData.clear_texture_cache()
+
+
 func _ready() -> void:
 	super()
 	_close_button.pressed.connect(close)
