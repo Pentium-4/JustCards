@@ -1,0 +1,356 @@
+/* Just Cards — стили.
+ *
+ * Как устроен масштаб (то же, что stretch "expand" в Godot):
+ * все размеры ниже указаны в пикселях макета 1125×2436. Каждый экран
+ * лежит в .stage, которую JavaScript масштабирует под экран телефона
+ * (переменная --s). Поэтому координаты можно брать прямо из макета.
+ */
+
+/* ---------- Палитра: все цвета в одном месте (как Theme в Godot) ---------- */
+:root {
+	--cream: #F8ECBC;
+	--cream-tile: #F8EABC;
+	--mint: #AAD2B1;
+	--orange-light: #FB9D70;
+	--orange: #D97E58;
+	--orange-dark: #DE6F4B;
+	--orange-bottom: #D57B57;
+	--red: #FC877B;
+	--red-top: #FB7C5E;
+	--add-stack: rgba(182, 86, 98, 0.88);
+	--plate-grey: #A69E7A;
+	--green: #7EC75D;
+	--start: #D08666;
+	--text-shadow: 3px 5px 3px rgba(56, 43, 20, 0.45);
+	--soft-shadow: 6px 8px 16px rgba(51, 31, 13, 0.3);
+
+	/* Масштаб и размеры «сцены» — их выставляет js/ui.js */
+	--s: 0.35;
+	--sw: 1125px;
+	--sh: 2436px;
+	--fx: 0px;
+	--fy: 0px;
+}
+
+/* ---------- Шрифты ----------
+ * Abel для латиницы; для кириллицы и грузинского — похожие узкие шрифты.
+ * unicode-range говорит браузеру, какой файл брать для каких букв. */
+@font-face {
+	font-family: "Abel";
+	src: url("fonts/abel.woff2") format("woff2");
+}
+@font-face {
+	font-family: "JC Cyrillic";
+	src: url("fonts/roboto-condensed-cyrillic.woff2") format("woff2");
+	font-weight: 100 900;
+	unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+	font-family: "JC Georgian";
+	src: url("fonts/noto-sans-georgian.woff2") format("woff2");
+	font-weight: 100 900;
+	font-stretch: 62.5% 100%;
+	unicode-range: U+10A0-10FF, U+1C90-1CBF, U+2D00-2D2F;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
+	background: #F5B885;
+	overscroll-behavior: none;
+}
+
+body {
+	font-family: "Abel", "JC Cyrillic", "JC Georgian", sans-serif;
+	font-variation-settings: "wght" 300, "wdth" 62.5;
+	color: #fff;
+	-webkit-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+	touch-action: manipulation;
+}
+
+#app, #layers, .layer {
+	position: fixed;
+	inset: 0;
+}
+
+#background {
+	position: fixed;
+	inset: 0;
+	background: url("img/bg_main.png") center / cover no-repeat;
+}
+
+/* ---------- Слои и сцена ---------- */
+.layer {
+	pointer-events: none;
+}
+.layer > * { pointer-events: auto; }
+
+.stage {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: var(--sw);
+	height: var(--sh);
+	transform: scale(var(--s));
+	transform-origin: 0 0;
+	pointer-events: none;
+}
+.stage * { pointer-events: auto; }
+.stage .passthrough { pointer-events: none; }
+
+/* Рамка макета 1125×2436 по центру сцены */
+.frame {
+	position: absolute;
+	left: var(--fx);
+	top: var(--fy);
+	width: 1125px;
+	height: 2436px;
+	pointer-events: none;
+}
+
+/* Плавная смена экранов */
+.screen { opacity: 0; transition: opacity 0.35s ease; }
+.screen.shown { opacity: 1; }
+
+/* ---------- Размытый фон под попапами ---------- */
+.blur {
+	position: absolute;
+	inset: 0;
+	-webkit-backdrop-filter: blur(calc(var(--s) * 48px));
+	backdrop-filter: blur(calc(var(--s) * 48px));
+	background: rgba(31, 20, 13, 0.2);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+.layer.open .blur { opacity: 1; }
+
+.pop {
+	transform: scale(0.85);
+	opacity: 0;
+	transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+}
+.layer.open .pop { transform: scale(1); opacity: 1; }
+.layer.closing .pop { transform: scale(0.85); opacity: 0; transition-timing-function: ease-in; }
+
+/* ---------- Текст ---------- */
+.label {
+	position: absolute;
+	color: #fff;
+	text-shadow: var(--text-shadow);
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1.05;
+}
+
+/* ---------- Кнопка (аналог IconButton) ---------- */
+.btn {
+	position: absolute;
+	border: none;
+	padding: 0;
+	border-radius: 50%;
+	background: var(--c, var(--orange-light));
+	box-shadow: var(--soft-shadow);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	font: inherit;
+	cursor: pointer;
+	transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.18s ease, opacity 0.2s ease;
+}
+.btn:active, .btn.pressed {
+	transform: scale(0.9);
+	filter: brightness(0.88);
+	box-shadow: 3px 4px 10px rgba(51, 31, 13, 0.2);
+}
+.btn.flat { background: transparent; box-shadow: none; }
+.btn.flat:active { filter: none; }
+.btn.disabled { opacity: 0.5; pointer-events: none; }
+.btn.hidden { opacity: 0; pointer-events: none; }
+.btn .caption { text-shadow: var(--text-shadow); line-height: 1; }
+
+/* Иконка: белая SVG как маска, поэтому цвет можно задать любой (--ic). */
+.icon-wrap {
+	filter: drop-shadow(1.5px 2.5px 1.5px rgba(51, 38, 13, 0.22));
+	pointer-events: none;
+	display: flex;
+}
+.icon {
+	width: var(--isz);
+	height: var(--isz);
+	background: var(--ic, #fff);
+	-webkit-mask: var(--icon) center / contain no-repeat;
+	mask: var(--icon) center / contain no-repeat;
+	transform: rotate(var(--rot, 0deg));
+}
+
+/* ---------- Поля ввода ---------- */
+.field {
+	position: absolute;
+	border: none;
+	outline: none;
+	border-radius: 25px;
+	background: var(--mint);
+	box-shadow: 4px 6px 8px rgba(64, 51, 25, 0.3);
+	color: #fff;
+	caret-color: #fff;
+	font: inherit;
+	text-align: center;
+	padding: 0 30px;
+	-webkit-user-select: text;
+	user-select: text;
+	text-shadow: var(--text-shadow);
+}
+.field::placeholder { color: rgba(255, 255, 255, 0.75); text-shadow: none; }
+
+.panel {
+	position: absolute;
+	background: var(--cream);
+	border-radius: 120px;
+	box-shadow: 8px 12px 24px rgba(31, 26, 13, 0.4);
+}
+
+/* ---------- Экран стаков ---------- */
+.column {
+	position: absolute;
+	left: var(--fx);
+	top: 0;
+	width: 1125px;
+	height: var(--sh);
+}
+.scroll {
+	position: absolute;
+	inset: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: none;
+}
+.scroll::-webkit-scrollbar { display: none; }
+.grid {
+	display: grid;
+	grid-template-columns: repeat(3, 240px);
+	gap: 100px;
+	padding: 355px 0 180px 80px;
+}
+
+.tile {
+	position: relative;
+	width: 240px;
+	height: 240px;
+}
+.tile .back, .tile .front {
+	position: absolute;
+	width: 220px;
+	height: 224px;
+	border-radius: 45px;
+	pointer-events: none;
+}
+.tile .back {
+	background: rgba(248, 234, 188, 0.55);
+	border: 2px solid rgba(255, 255, 255, 0.35);
+}
+.tile .back2 { left: 0; top: 0; }
+.tile .back1 { left: 10px; top: 8px; }
+.tile .front {
+	left: 20px;
+	top: 16px;
+	background: var(--cream-tile);
+	box-shadow: 5px 8px 14px rgba(51, 31, 13, 0.3);
+}
+.tile .name {
+	position: absolute;
+	inset: 14px;
+	font-size: 56px;
+	line-height: 0.95;
+	text-transform: uppercase;
+	text-shadow: 2px 3px 3px rgba(77, 64, 38, 0.85);
+	overflow: hidden;
+	word-break: break-word;
+	pointer-events: none;
+}
+.tile.pop-in { animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.tile.dimmed { opacity: 0.25; }
+@keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+
+.ghost {
+	position: fixed;
+	left: 0;
+	top: 0;
+	transform-origin: 0 0;
+	pointer-events: none;
+	z-index: 50;
+}
+
+.scrollbar {
+	position: absolute;
+	right: 18px;
+	top: 168px;
+	bottom: 121px;
+	width: 44px;
+	border-radius: 22px;
+	background: rgba(0, 0, 0, 0.28);
+	transition: opacity 0.2s;
+}
+.scrollbar .thumb {
+	position: absolute;
+	left: 0;
+	right: 0;
+	border-radius: 22px;
+	background: rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- Карточка ---------- */
+.card-holder {
+	position: absolute;
+	left: 80px;
+	top: 352px;
+	width: 966px;
+	height: 1672px;
+	perspective: 3200px;
+	pointer-events: none;
+}
+.card {
+	position: absolute;
+	inset: 0;
+	background: var(--cream);
+	border-radius: 140px;
+	box-shadow: 8px 14px 28px rgba(31, 26, 13, 0.4);
+	touch-action: none;
+	transform-style: flat;
+}
+.image-frame {
+	position: absolute;
+	left: 118px;
+	top: 291px;
+	width: 726px;
+	height: 726px;
+	border-radius: 30px;
+	background: var(--mint) center / cover no-repeat;
+	box-shadow: 5px 7px 10px rgba(64, 51, 25, 0.3);
+	touch-action: none;
+}
+.image-frame.dimmed { opacity: 0.25; }
+.image-ghost {
+	position: fixed;
+	left: 0;
+	top: 0;
+	border-radius: 30px;
+	background: center / cover no-repeat;
+	pointer-events: none;
+	z-index: 50;
+	transform-origin: 0 0;
+	box-shadow: 5px 7px 10px rgba(64, 51, 25, 0.3);
+}
+.word {
+	left: 120px;
+	width: 726px;
+	height: 132px;
+}

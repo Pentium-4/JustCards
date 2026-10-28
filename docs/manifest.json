@@ -1,0 +1,15 @@
+{
+	"name": "Just Cards",
+	"short_name": "Just Cards",
+	"start_url": "./",
+	"scope": "./",
+	"display": "standalone",
+	"orientation": "portrait",
+	"background_color": "#F5B885",
+	"theme_color": "#F5B885",
+	"icons": [
+		{ "src": "img/icon_144.png", "sizes": "144x144", "type": "image/png" },
+		{ "src": "img/icon_180.png", "sizes": "180x180", "type": "image/png" },
+		{ "src": "img/icon_512.png", "sizes": "512x512", "type": "image/png" }
+	]
+}
